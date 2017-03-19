@@ -38,29 +38,23 @@ class RepeatedTestExtension implements TestTemplateInvocationContextProvider {
 
 	@Override
 	public Stream<TestTemplateInvocationContext> provide(ContainerExtensionContext context) {
-		Method templateMethod = Preconditions.notNull(context.getTestMethod().orElse(null),
-			"test method must not be null");
+		Method testMethod = Preconditions.notNull(context.getTestMethod().orElse(null), "test method must not be null");
+		String displayName = context.getDisplayName();
+		RepeatedTest repeatedTest = AnnotationUtils.findAnnotation(testMethod, RepeatedTest.class).get();
 
 		// @formatter:off
 		return IntStream
-				.rangeClosed(1, getRepeatCount(templateMethod))
-				.mapToObj(n -> new RepeatedTestInvocationContext(n, context.getDisplayName(),
-					createDisplayNameFormatter(templateMethod)));
+				.rangeClosed(1, numRepetitions(repeatedTest))
+				.mapToObj(n -> new RepeatedTestInvocationContext(n, displayName, displayNameFormatter(repeatedTest)));
 		// @formatter:on
 	}
 
-	private int getRepeatCount(Method templateMethod) {
-		// @formatter:off
-		int count = AnnotationUtils.findAnnotation(templateMethod, RepeatedTest.class)
-				.map(RepeatedTest::value)
-				.orElse(1);
-		// @formatter:on
-		return Math.max(1, count);
+	private int numRepetitions(RepeatedTest repeatedTest) {
+		return Math.max(1, repeatedTest.value());
 	}
 
-	private RepeatedTestDisplayNameFormatter createDisplayNameFormatter(Method templateMethod) {
-		String name = AnnotationUtils.findAnnotation(templateMethod, RepeatedTest.class).get().name();
-		return new RepeatedTestDisplayNameFormatter(name);
+	private RepeatedTestDisplayNameFormatter displayNameFormatter(RepeatedTest repeatedTest) {
+		return new RepeatedTestDisplayNameFormatter(repeatedTest.name());
 	}
 
 }
