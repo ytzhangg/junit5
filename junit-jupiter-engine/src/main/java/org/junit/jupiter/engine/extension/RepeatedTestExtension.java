@@ -41,13 +41,11 @@ class RepeatedTestExtension implements TestTemplateInvocationContextProvider {
 		Method templateMethod = Preconditions.notNull(context.getTestMethod().orElse(null),
 			"test method must not be null");
 
-		RepeatedTestInvocationContext testInvocationContext = new RepeatedTestInvocationContext(
-			createDisplayNameFormatter(templateMethod), context.getDisplayName());
-
 		// @formatter:off
 		return IntStream
 				.rangeClosed(1, getRepeatCount(templateMethod))
-				.mapToObj(n -> testInvocationContext);
+				.mapToObj(n -> new RepeatedTestInvocationContext(n, context.getDisplayName(),
+					createDisplayNameFormatter(templateMethod)));
 		// @formatter:on
 	}
 

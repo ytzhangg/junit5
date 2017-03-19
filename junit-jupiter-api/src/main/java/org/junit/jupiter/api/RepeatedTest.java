@@ -28,7 +28,8 @@ import org.junit.platform.commons.meta.API;
  *
  * <p>Each invocation of the repeated test behaves like the execution of a
  * regular {@link Test @Test} method will full support for the same lifecycle
- * callbacks and extensions.
+ * callbacks and extensions. In addition, the current <em>invocation index</em>
+ * (i.e., repetition count) can be injected via {@link InvocationIndex @InvocationIndex}
  *
  * <p>{@code @RepeatedTest} methods must not be {@code private} or {@code static}
  * and must return {@code void}.
@@ -43,6 +44,7 @@ import org.junit.platform.commons.meta.API;
  *
  * @since 5.0
  * @see DisplayName
+ * @see InvocationIndex
  * @see TestInfo
  * @see TestTemplate
  * @see Test
@@ -68,7 +70,8 @@ public @interface RepeatedTest {
 	 * <ul>
 	 * <li><code>{displayName}</code>: the {@linkplain TestInfo#getDisplayName
 	 * display name} of the {@code @RepeatedTest} method</li>
-	 * <li><code>{index}</code>: the current invocation index (i.e., repetition count)</li>
+	 * <li><code>{index}</code>: the current <em>invocation index</em> (i.e.,
+	 * repetition count)</li>
 	 * </ul>
 	 *
 	 * <p>Defaults to <code>"{displayName} :: repetition {index}"</code>.

@@ -10,7 +10,12 @@
 
 package org.junit.jupiter.engine.extension;
 
+import static java.util.Collections.singletonList;
+
+import java.util.List;
+
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.extension.Extension;
 import org.junit.jupiter.api.extension.TestTemplateInvocationContext;
 
 /**
@@ -20,17 +25,26 @@ import org.junit.jupiter.api.extension.TestTemplateInvocationContext;
  */
 class RepeatedTestInvocationContext implements TestTemplateInvocationContext {
 
-	private final RepeatedTestDisplayNameFormatter formatter;
+	private final int repetition;
 	private final String displayName;
+	private final RepeatedTestDisplayNameFormatter formatter;
 
-	public RepeatedTestInvocationContext(RepeatedTestDisplayNameFormatter formatter, String displayName) {
-		this.formatter = formatter;
+	public RepeatedTestInvocationContext(int repetition, String displayName,
+			RepeatedTestDisplayNameFormatter formatter) {
+
+		this.repetition = repetition;
 		this.displayName = displayName;
+		this.formatter = formatter;
 	}
 
 	@Override
 	public String getDisplayName(int invocationIndex) {
-		return formatter.format(displayName, invocationIndex);
+		return this.formatter.format(this.displayName, invocationIndex);
+	}
+
+	@Override
+	public List<Extension> getAdditionalExtensions() {
+		return singletonList(new InvocationIndexParameterResolver(this.repetition));
 	}
 
 }

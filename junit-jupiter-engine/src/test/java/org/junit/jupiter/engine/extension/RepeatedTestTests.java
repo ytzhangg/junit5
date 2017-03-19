@@ -14,7 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.InvocationIndex;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.TestInfo;
 
@@ -27,10 +30,15 @@ class RepeatedTestTests {
 
 	private static int fortyTwo = 0;
 
-	@RepeatedTest(42)
-	void repeatedFortyTwoTimes(TestInfo testInfo) {
-		assertThat(testInfo.getDisplayName()).startsWith("repeatedFortyTwoTimes(TestInfo) :: repetition ");
-		fortyTwo++;
+	@BeforeEach
+	@AfterEach
+	void beforeAndAfterEach(TestInfo testInfo, @InvocationIndex int repetition) {
+		if (testInfo.getDisplayName().startsWith("repeatedOnce")) {
+			assertThat(repetition).isEqualTo(1);
+		}
+		else if (testInfo.getDisplayName().startsWith("repeatedFortyTwoTimes")) {
+			assertThat(repetition).isBetween(1, 42);
+		}
 	}
 
 	@AfterAll
@@ -51,6 +59,12 @@ class RepeatedTestTests {
 	@RepeatedTest(1)
 	void repeatedOnce(TestInfo testInfo) {
 		assertThat(testInfo.getDisplayName()).isEqualTo("repeatedOnce(TestInfo) :: repetition 1");
+	}
+
+	@RepeatedTest(42)
+	void repeatedFortyTwoTimes(TestInfo testInfo) {
+		assertThat(testInfo.getDisplayName()).startsWith("repeatedFortyTwoTimes(TestInfo) :: repetition ");
+		fortyTwo++;
 	}
 
 	@RepeatedTest(1)
@@ -86,6 +100,18 @@ class RepeatedTestTests {
 	void defaultDisplayNameWithPatternIncludingDisplayNameAndIndex(TestInfo testInfo) {
 		assertThat(testInfo.getDisplayName()).isEqualTo(
 			"Repetition #1 for defaultDisplayNameWithPatternIncludingDisplayNameAndIndex(TestInfo)");
+	}
+
+	@RepeatedTest(value = 5, name = "{displayName}")
+	void injectInvocationIndexAsInt(TestInfo testInfo, @InvocationIndex int repetition) {
+		assertThat(testInfo.getDisplayName()).isEqualTo("injectInvocationIndexAsInt(TestInfo, int)");
+		assertThat(repetition).isBetween(1, 5);
+	}
+
+	@RepeatedTest(value = 5, name = "{displayName}")
+	void injectInvocationIndexAsInteger(TestInfo testInfo, @InvocationIndex Integer repetition) {
+		assertThat(testInfo.getDisplayName()).isEqualTo("injectInvocationIndexAsInteger(TestInfo, Integer)");
+		assertThat(repetition).isBetween(1, 5);
 	}
 
 }
