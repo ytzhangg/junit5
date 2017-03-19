@@ -22,8 +22,9 @@ import org.junit.platform.commons.meta.API;
 
 /**
  * {@code @RepeatedTest} is used to signal that the annotated method is a
- * <em>test template</em> method that should be repeated a specified number of
- * times.
+ * <em>test template</em> method that should be repeated a {@linkplain #value
+ * specified number of times} with a configurable {@linkplain #name display
+ * name}.
  *
  * <p>Each invocation of the repeated test behaves like the execution of a
  * regular {@link Test @Test} method will full support for the same lifecycle
@@ -54,10 +55,26 @@ import org.junit.platform.commons.meta.API;
 public @interface RepeatedTest {
 
 	/**
-	 * The number of times the test should be repeated.
+	 * The number of repetitions.
 	 *
 	 * <p>Any value less than {@code 1} will be treated as {@code 1}.
 	 */
 	int value();
+
+	/**
+	 * The display name for each repeated test invocation.
+	 *
+	 * <h4>Supported placeholders</h4>
+	 * <ul>
+	 * <li><code>{displayName}</code>: the {@linkplain TestInfo#getDisplayName
+	 * display name} of the {@code @RepeatedTest} method</li>
+	 * <li><code>{index}</code>: the current invocation index (i.e., repetition count)</li>
+	 * </ul>
+	 *
+	 * <p>Defaults to <code>"{displayName} :: repetition {index}"</code>.
+	 *
+	 * @see TestInfo#getDisplayName()
+	 */
+	String name() default "{displayName} :: repetition {index}";
 
 }

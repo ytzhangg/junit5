@@ -64,4 +64,28 @@ class RepeatedTestTests {
 		assertThat(testInfo.getDisplayName()).isEqualTo("Repeat! :: repetition 1");
 	}
 
+	@RepeatedTest(value = 1, name = "{displayName}")
+	@DisplayName("Repeat!")
+	void customDisplayNameWithPatternIncludingDisplayName(TestInfo testInfo) {
+		assertThat(testInfo.getDisplayName()).isEqualTo("Repeat!");
+	}
+
+	@RepeatedTest(value = 1, name = "#{index}")
+	@DisplayName("Repeat!")
+	void customDisplayNameWithPatternIncludingIndex(TestInfo testInfo) {
+		assertThat(testInfo.getDisplayName()).isEqualTo("#1");
+	}
+
+	@RepeatedTest(value = 1, name = "Repetition #{index} for {displayName}")
+	@DisplayName("Repeat!")
+	void customDisplayNameWithPatternIncludingDisplayNameAndIndex(TestInfo testInfo) {
+		assertThat(testInfo.getDisplayName()).isEqualTo("Repetition #1 for Repeat!");
+	}
+
+	@RepeatedTest(value = 1, name = "Repetition #{index} for {displayName}")
+	void defaultDisplayNameWithPatternIncludingDisplayNameAndIndex(TestInfo testInfo) {
+		assertThat(testInfo.getDisplayName()).isEqualTo(
+			"Repetition #1 for defaultDisplayNameWithPatternIncludingDisplayNameAndIndex(TestInfo)");
+	}
+
 }
