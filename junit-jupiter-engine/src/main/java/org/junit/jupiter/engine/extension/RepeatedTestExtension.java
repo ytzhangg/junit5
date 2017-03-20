@@ -60,6 +60,7 @@ class RepeatedTestExtension implements TestTemplateInvocationContextProvider {
 			int numRepetitions) {
 
 		String name = repeatedTest.name();
+		// TODO Check precondition in conjunction with #743: name must actually NOT be blank.
 		if (StringUtils.isBlank(name)) {
 			name = AnnotationUtils.getDefaultValue(repeatedTest, "name", String.class).get();
 		}
