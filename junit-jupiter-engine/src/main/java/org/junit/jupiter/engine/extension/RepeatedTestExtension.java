@@ -42,29 +42,28 @@ class RepeatedTestExtension implements TestTemplateInvocationContextProvider {
 		Method testMethod = Preconditions.notNull(context.getTestMethod().orElse(null), "test method must not be null");
 		String displayName = context.getDisplayName();
 		RepeatedTest repeatedTest = AnnotationUtils.findAnnotation(testMethod, RepeatedTest.class).get();
-		int numRepetitions = numRepetitions(repeatedTest);
-		RepeatedTestDisplayNameFormatter formatter = displayNameFormatter(repeatedTest, displayName, numRepetitions);
+		int totalRepetitions = totalRepetitions(repeatedTest);
+		RepeatedTestDisplayNameFormatter formatter = displayNameFormatter(repeatedTest, displayName);
 
 		// @formatter:off
 		return IntStream
-				.rangeClosed(1, numRepetitions)
-				.mapToObj(repetition -> new RepeatedTestInvocationContext(repetition, formatter));
+				.rangeClosed(1, totalRepetitions)
+				.mapToObj(repetition -> new RepeatedTestInvocationContext(repetition, totalRepetitions, formatter));
 		// @formatter:on
 	}
 
-	private int numRepetitions(RepeatedTest repeatedTest) {
+	private int totalRepetitions(RepeatedTest repeatedTest) {
 		return Math.max(1, repeatedTest.value());
 	}
 
-	private RepeatedTestDisplayNameFormatter displayNameFormatter(RepeatedTest repeatedTest, String displayName,
-			int numRepetitions) {
+	private RepeatedTestDisplayNameFormatter displayNameFormatter(RepeatedTest repeatedTest, String displayName) {
 
-		String name = repeatedTest.name();
+		String pattern = repeatedTest.name();
 		// TODO Check precondition in conjunction with #743: name must actually NOT be blank.
-		if (StringUtils.isBlank(name)) {
-			name = AnnotationUtils.getDefaultValue(repeatedTest, "name", String.class).get();
+		if (StringUtils.isBlank(pattern)) {
+			pattern = AnnotationUtils.getDefaultValue(repeatedTest, "name", String.class).get();
 		}
-		return new RepeatedTestDisplayNameFormatter(name, displayName, numRepetitions);
+		return new RepeatedTestDisplayNameFormatter(pattern, displayName);
 	}
 
 }

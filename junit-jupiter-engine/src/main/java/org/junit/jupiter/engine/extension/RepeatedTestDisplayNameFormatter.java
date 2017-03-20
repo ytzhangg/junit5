@@ -10,26 +10,32 @@
 
 package org.junit.jupiter.engine.extension;
 
+import static org.junit.jupiter.api.RepeatedTest.CURRENT_REPETITION_PLACEHOLDER;
+import static org.junit.jupiter.api.RepeatedTest.DISPLAY_NAME_PLACEHOLDER;
+import static org.junit.jupiter.api.RepeatedTest.TOTAL_REPETITIONS_PLACEHOLDER;
+
+import org.junit.jupiter.api.RepeatedTest;
+
 /**
+ * Display name formatter for a {@link RepeatedTest @RepeatedTest}.
+ *
  * @since 5.0
  */
 class RepeatedTestDisplayNameFormatter {
 
-	private final String namePattern;
+	private final String pattern;
 	private final String displayName;
-	private final int numRepetitions;
 
-	RepeatedTestDisplayNameFormatter(String namePattern, String displayName, int numRepetitions) {
-		this.namePattern = namePattern;
+	RepeatedTestDisplayNameFormatter(String pattern, String displayName) {
+		this.pattern = pattern;
 		this.displayName = displayName;
-		this.numRepetitions = numRepetitions;
 	}
 
-	String format(int repetition) {
-		return this.namePattern//
-				.replace("{displayName}", this.displayName)//
-				.replace("{repetition}", String.valueOf(repetition))//
-				.replace("{repetitions}", String.valueOf(this.numRepetitions));
+	String format(int currentRepetition, int totalRepetitions) {
+		return this.pattern//
+				.replace(DISPLAY_NAME_PLACEHOLDER, this.displayName)//
+				.replace(CURRENT_REPETITION_PLACEHOLDER, String.valueOf(currentRepetition))//
+				.replace(TOTAL_REPETITIONS_PLACEHOLDER, String.valueOf(totalRepetitions));
 	}
 
 }
