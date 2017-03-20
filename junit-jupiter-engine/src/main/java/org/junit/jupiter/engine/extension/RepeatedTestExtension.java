@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.TestTemplateInvocationContext;
 import org.junit.jupiter.api.extension.TestTemplateInvocationContextProvider;
 import org.junit.platform.commons.util.AnnotationUtils;
 import org.junit.platform.commons.util.Preconditions;
+import org.junit.platform.commons.util.StringUtils;
 
 /**
  * {@code TestTemplateInvocationContextProvider} that supports the
@@ -54,7 +55,12 @@ class RepeatedTestExtension implements TestTemplateInvocationContextProvider {
 	}
 
 	private RepeatedTestDisplayNameFormatter displayNameFormatter(RepeatedTest repeatedTest) {
-		return new RepeatedTestDisplayNameFormatter(repeatedTest.name());
+		String name = repeatedTest.name();
+		if (StringUtils.isBlank(name)) {
+			// TODO Introduce support for retrieving the default value of an annotation attribute.
+			name = "{displayName} :: repetition {repetition}";
+		}
+		return new RepeatedTestDisplayNameFormatter(name);
 	}
 
 }

@@ -72,10 +72,21 @@ class RepeatedTestTests {
 		assertThat(testInfo.getDisplayName()).isEqualTo("defaultDisplayName(TestInfo) :: repetition 1");
 	}
 
+	@RepeatedTest(value = 1, name = " \t  ")
+	void defaultDisplayNameWithBlankPattern(TestInfo testInfo) {
+		assertThat(testInfo.getDisplayName()).isEqualTo("defaultDisplayNameWithBlankPattern(TestInfo) :: repetition 1");
+	}
+
 	@RepeatedTest(1)
 	@DisplayName("Repeat!")
 	void customDisplayName(TestInfo testInfo) {
 		assertThat(testInfo.getDisplayName()).isEqualTo("Repeat! :: repetition 1");
+	}
+
+	@RepeatedTest(1)
+	@DisplayName("   \t ")
+	void customDisplayNameWithBlankName(TestInfo testInfo) {
+		assertThat(testInfo.getDisplayName()).isEqualTo("customDisplayNameWithBlankName(TestInfo) :: repetition 1");
 	}
 
 	@RepeatedTest(value = 1, name = "{displayName}")
@@ -84,19 +95,19 @@ class RepeatedTestTests {
 		assertThat(testInfo.getDisplayName()).isEqualTo("Repeat!");
 	}
 
-	@RepeatedTest(value = 1, name = "#{index}")
+	@RepeatedTest(value = 1, name = "#{repetition}")
 	@DisplayName("Repeat!")
 	void customDisplayNameWithPatternIncludingIndex(TestInfo testInfo) {
 		assertThat(testInfo.getDisplayName()).isEqualTo("#1");
 	}
 
-	@RepeatedTest(value = 1, name = "Repetition #{index} for {displayName}")
+	@RepeatedTest(value = 1, name = "Repetition #{repetition} for {displayName}")
 	@DisplayName("Repeat!")
 	void customDisplayNameWithPatternIncludingDisplayNameAndIndex(TestInfo testInfo) {
 		assertThat(testInfo.getDisplayName()).isEqualTo("Repetition #1 for Repeat!");
 	}
 
-	@RepeatedTest(value = 1, name = "Repetition #{index} for {displayName}")
+	@RepeatedTest(value = 1, name = "Repetition #{repetition} for {displayName}")
 	void defaultDisplayNameWithPatternIncludingDisplayNameAndIndex(TestInfo testInfo) {
 		assertThat(testInfo.getDisplayName()).isEqualTo(
 			"Repetition #1 for defaultDisplayNameWithPatternIncludingDisplayNameAndIndex(TestInfo)");

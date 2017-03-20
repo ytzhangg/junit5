@@ -21,8 +21,8 @@ class RepeatedTestDisplayNameFormatter {
 		this.namePattern = namePattern;
 	}
 
-	String format(String displayName, int invocationIndex) {
-		String result = namePattern.replace("{index}", String.valueOf(invocationIndex));
+	String format(String displayName, int repetition) {
+		String result = namePattern.replace("{repetition}", String.valueOf(repetition));
 		return result.replace("{displayName}", displayName);
 	}
 
