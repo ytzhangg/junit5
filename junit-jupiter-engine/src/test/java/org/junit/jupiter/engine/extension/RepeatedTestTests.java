@@ -72,6 +72,11 @@ class RepeatedTestTests {
 		assertThat(testInfo.getDisplayName()).isEqualTo("defaultDisplayName(TestInfo) :: repetition 1");
 	}
 
+	@RepeatedTest(value = 1, name = "")
+	void defaultDisplayNameWithEmptyPattern(TestInfo testInfo) {
+		assertThat(testInfo.getDisplayName()).isEqualTo("defaultDisplayNameWithEmptyPattern(TestInfo) :: repetition 1");
+	}
+
 	@RepeatedTest(value = 1, name = " \t  ")
 	void defaultDisplayNameWithBlankPattern(TestInfo testInfo) {
 		assertThat(testInfo.getDisplayName()).isEqualTo("defaultDisplayNameWithBlankPattern(TestInfo) :: repetition 1");

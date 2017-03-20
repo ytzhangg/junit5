@@ -57,8 +57,7 @@ class RepeatedTestExtension implements TestTemplateInvocationContextProvider {
 	private RepeatedTestDisplayNameFormatter displayNameFormatter(RepeatedTest repeatedTest) {
 		String name = repeatedTest.name();
 		if (StringUtils.isBlank(name)) {
-			// TODO Introduce support for retrieving the default value of an annotation attribute.
-			name = "{displayName} :: repetition {repetition}";
+			name = AnnotationUtils.getDefaultValue(repeatedTest, "name", String.class).get();
 		}
 		return new RepeatedTestDisplayNameFormatter(name);
 	}
