@@ -48,17 +48,17 @@ class RepeatedTestTests {
 
 	@RepeatedTest(-99)
 	void negativeRepeatCount(TestInfo testInfo) {
-		assertThat(testInfo.getDisplayName()).isEqualTo("negativeRepeatCount(TestInfo) :: repetition 1");
+		assertThat(testInfo.getDisplayName()).isEqualTo("negativeRepeatCount(TestInfo) :: repetition 1 of 1");
 	}
 
 	@RepeatedTest(0)
 	void zeroRepeatCount(TestInfo testInfo) {
-		assertThat(testInfo.getDisplayName()).isEqualTo("zeroRepeatCount(TestInfo) :: repetition 1");
+		assertThat(testInfo.getDisplayName()).isEqualTo("zeroRepeatCount(TestInfo) :: repetition 1 of 1");
 	}
 
 	@RepeatedTest(1)
 	void repeatedOnce(TestInfo testInfo) {
-		assertThat(testInfo.getDisplayName()).isEqualTo("repeatedOnce(TestInfo) :: repetition 1");
+		assertThat(testInfo.getDisplayName()).isEqualTo("repeatedOnce(TestInfo) :: repetition 1 of 1");
 	}
 
 	@RepeatedTest(42)
@@ -69,29 +69,32 @@ class RepeatedTestTests {
 
 	@RepeatedTest(1)
 	void defaultDisplayName(TestInfo testInfo) {
-		assertThat(testInfo.getDisplayName()).isEqualTo("defaultDisplayName(TestInfo) :: repetition 1");
+		assertThat(testInfo.getDisplayName()).isEqualTo("defaultDisplayName(TestInfo) :: repetition 1 of 1");
 	}
 
 	@RepeatedTest(value = 1, name = "")
 	void defaultDisplayNameWithEmptyPattern(TestInfo testInfo) {
-		assertThat(testInfo.getDisplayName()).isEqualTo("defaultDisplayNameWithEmptyPattern(TestInfo) :: repetition 1");
+		assertThat(testInfo.getDisplayName()).isEqualTo(
+			"defaultDisplayNameWithEmptyPattern(TestInfo) :: repetition 1 of 1");
 	}
 
 	@RepeatedTest(value = 1, name = " \t  ")
 	void defaultDisplayNameWithBlankPattern(TestInfo testInfo) {
-		assertThat(testInfo.getDisplayName()).isEqualTo("defaultDisplayNameWithBlankPattern(TestInfo) :: repetition 1");
+		assertThat(testInfo.getDisplayName()).isEqualTo(
+			"defaultDisplayNameWithBlankPattern(TestInfo) :: repetition 1 of 1");
 	}
 
 	@RepeatedTest(1)
 	@DisplayName("Repeat!")
 	void customDisplayName(TestInfo testInfo) {
-		assertThat(testInfo.getDisplayName()).isEqualTo("Repeat! :: repetition 1");
+		assertThat(testInfo.getDisplayName()).isEqualTo("Repeat! :: repetition 1 of 1");
 	}
 
 	@RepeatedTest(1)
 	@DisplayName("   \t ")
 	void customDisplayNameWithBlankName(TestInfo testInfo) {
-		assertThat(testInfo.getDisplayName()).isEqualTo("customDisplayNameWithBlankName(TestInfo) :: repetition 1");
+		assertThat(testInfo.getDisplayName()).isEqualTo(
+			"customDisplayNameWithBlankName(TestInfo) :: repetition 1 of 1");
 	}
 
 	@RepeatedTest(value = 1, name = "{displayName}")
@@ -102,20 +105,26 @@ class RepeatedTestTests {
 
 	@RepeatedTest(value = 1, name = "#{repetition}")
 	@DisplayName("Repeat!")
-	void customDisplayNameWithPatternIncludingIndex(TestInfo testInfo) {
+	void customDisplayNameWithPatternIncludingRepetition(TestInfo testInfo) {
 		assertThat(testInfo.getDisplayName()).isEqualTo("#1");
 	}
 
 	@RepeatedTest(value = 1, name = "Repetition #{repetition} for {displayName}")
 	@DisplayName("Repeat!")
-	void customDisplayNameWithPatternIncludingDisplayNameAndIndex(TestInfo testInfo) {
+	void customDisplayNameWithPatternIncludingDisplayNameAndRepetition(TestInfo testInfo) {
 		assertThat(testInfo.getDisplayName()).isEqualTo("Repetition #1 for Repeat!");
 	}
 
+	@RepeatedTest(value = 1, name = "{displayName} {repetition}/{repetitions}")
+	@DisplayName("Repeat!")
+	void customDisplayNameWithPatternIncludingDisplayNameRepetitionAndRepetitions(TestInfo testInfo) {
+		assertThat(testInfo.getDisplayName()).isEqualTo("Repeat! 1/1");
+	}
+
 	@RepeatedTest(value = 1, name = "Repetition #{repetition} for {displayName}")
-	void defaultDisplayNameWithPatternIncludingDisplayNameAndIndex(TestInfo testInfo) {
+	void defaultDisplayNameWithPatternIncludingDisplayNameAndRepetition(TestInfo testInfo) {
 		assertThat(testInfo.getDisplayName()).isEqualTo(
-			"Repetition #1 for defaultDisplayNameWithPatternIncludingDisplayNameAndIndex(TestInfo)");
+			"Repetition #1 for defaultDisplayNameWithPatternIncludingDisplayNameAndRepetition(TestInfo)");
 	}
 
 	@RepeatedTest(value = 5, name = "{displayName}")

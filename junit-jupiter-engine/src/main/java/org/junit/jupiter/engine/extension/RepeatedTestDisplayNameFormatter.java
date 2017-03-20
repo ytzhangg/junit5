@@ -16,14 +16,20 @@ package org.junit.jupiter.engine.extension;
 class RepeatedTestDisplayNameFormatter {
 
 	private final String namePattern;
+	private final String displayName;
+	private final int numRepetitions;
 
-	RepeatedTestDisplayNameFormatter(String namePattern) {
+	RepeatedTestDisplayNameFormatter(String namePattern, String displayName, int numRepetitions) {
 		this.namePattern = namePattern;
+		this.displayName = displayName;
+		this.numRepetitions = numRepetitions;
 	}
 
-	String format(String displayName, int repetition) {
-		String result = namePattern.replace("{repetition}", String.valueOf(repetition));
-		return result.replace("{displayName}", displayName);
+	String format(int repetition) {
+		return this.namePattern//
+				.replace("{displayName}", this.displayName)//
+				.replace("{repetition}", String.valueOf(repetition))//
+				.replace("{repetitions}", String.valueOf(this.numRepetitions));
 	}
 
 }

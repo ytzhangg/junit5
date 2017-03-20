@@ -29,7 +29,8 @@ import org.junit.platform.commons.meta.API;
  * <p>Each invocation of the repeated test behaves like the execution of a
  * regular {@link Test @Test} method with full support for the same lifecycle
  * callbacks and extensions. In addition, the current <em>repetition count</em>
- * can be injected via {@link InvocationIndex @InvocationIndex}.
+ * and total number of repetitions can be injected via
+ * {@link InvocationIndex @InvocationIndex}.
  *
  * <p>{@code @RepeatedTest} methods must not be {@code private} or {@code static}
  * and must return {@code void}.
@@ -70,15 +71,16 @@ public @interface RepeatedTest {
 	 * <ul>
 	 * <li><code>{displayName}</code>: the {@linkplain TestInfo#getDisplayName
 	 * display name} of the {@code @RepeatedTest} method</li>
-	 * <li><code>{repetition}</code>: the current <em>repetition count</em></li>
+	 * <li><code>{repetition}</code>: the current repetition count</li>
+	 * <li><code>{repetitions}</code>: the total number of repetitions</li>
 	 * </ul>
 	 *
-	 * <p>Defaults to <code>"{displayName} :: repetition {repetition}"</code>,
-	 * resulting in names such as {@code "myTest() :: repetition 1"},
-	 * {@code "myTest() :: repetition 2"}, etc.
+	 * <p>Defaults to <code>"{displayName} :: repetition {repetition} of {repetitions}"</code>,
+	 * resulting in names such as {@code "myTest() :: repetition 1 of 2"},
+	 * {@code "myTest() :: repetition 2 of 2"}, etc.
 	 *
 	 * @see TestInfo#getDisplayName()
 	 */
-	String name() default "{displayName} :: repetition {repetition}";
+	String name() default "{displayName} :: repetition {repetition} of {repetitions}";
 
 }
