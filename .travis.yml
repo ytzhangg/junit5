@@ -9,14 +9,14 @@ matrix:
     - jdk: oraclejdk9
       install:
         - cd ..
-        - wget http://download.java.net/java/jdk9/archive/172/binaries/jdk-9-ea+172_linux-x64_bin.tar.gz
-        - tar -xzf jdk-9-ea+172_linux-x64_bin.tar.gz
+        - wget http://download.java.net/java/jigsaw/archive/172/binaries/jigsaw-jdk-9-ea+172_linux-x64_bin.tar.gz
+        - tar -xzf jigsaw-jdk-9-ea+172_linux-x64_bin.tar.gz
         - export JAVA_HOME=$PWD/jdk-9
         - PATH=$JAVA_HOME/bin:$PATH
         - cd -
         - ./gradlew -version
-      env: JDK_JAVA_OPTIONS='--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED'
-           #JDK_JAVA_OPTIONS='--permit-illegal-access'
+      env: JDK_JAVA_OPTIONS='--permit-illegal-access'
+
 
 # Display Gradle version instead of letting Travis execute './gradlew assemble' by default
 install:
