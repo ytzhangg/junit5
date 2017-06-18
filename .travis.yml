@@ -6,6 +6,8 @@ matrix:
   include:
     - jdk: oraclejdk8
       addons: {apt: {packages: [oracle-java8-installer]}}
+      env:
+        - _JAVA_OPTIONS='-Xmx500m -XX:+HeapDumpOnOutOfMemoryError'
     - jdk: oraclejdk9
       before_install:
         - cd ~
@@ -15,12 +17,10 @@ matrix:
         - PATH=$JAVA_HOME/bin:$PATH
         - cd -
       env:
-        - JDK_JAVA_OPTIONS='--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED'
+        - JDK_JAVA_OPTIONS='-Xmx500m -XX:+HeapDumpOnOutOfMemoryError --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED'
 
 # Don't let Travis CI execute './gradlew assemble' by default
 install:
-# Disable Gradle daemon according to https://docs.gradle.org/4.0/userguide/gradle_daemon.html
-# - mkdir -p ~/.gradle && echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
 # Display Gradle, Groovy, JVM and other versions
   - ./gradlew -version
 
